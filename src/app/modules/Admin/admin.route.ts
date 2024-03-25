@@ -1,7 +1,15 @@
 import express from "express";
-import { adminController } from "./admin.controller";
+import { AdminController } from "./admin.controller";
 const router = express.Router();
 
-router.get("/", adminController.getAllAdmins);
+router.get("/", AdminController.getAllFromDB);
+
+router.get("/:id", AdminController.getByIdFromDB);
+
+router.patch("/:id", AdminController.updateIntoDB);
+
+router.delete("/:id", AdminController.deleteFromDB);
+
+router.delete("/soft/:id", AdminController.softDeleteFromDB);
 
 export const AdminRoutes = router;
