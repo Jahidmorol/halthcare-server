@@ -2,38 +2,39 @@ import express from "express";
 import { AdminController } from "./admin.controller";
 import validateRequest from "../../middlewares/validateRequest";
 import { adminValidationSchemas } from "./admin.validation";
+import auth from "../../middlewares/auth";
+import { UserRole } from "@prisma/client";
 const router = express.Router();
 
-// const update = z.object({
-//   body: z.object({
-//     name: z.string().optional(),
-//     contactNumber: z.string().optional(),
-//   }),
-// });
+router.get(
+  "/",
+  auth(UserRole.SUPPER_ADMIN, UserRole.ADMIN),
+  AdminController.getAllFromDB
+);
 
-// const validateRequest = (schema: AnyZodObject) => async (req, res, next) => {
-//   try {
-//     await schema.parseAsync({
-//       body: req.body,
-//     });
-//     next();
-//   } catch (err) {
-//     next(err);
-//   }
-// };
-
-router.get("/", AdminController.getAllFromDB);
-
-router.get("/:id", AdminController.getByIdFromDB);
+router.get(
+  "/:id",
+  auth(UserRole.SUPPER_ADMIN, UserRole.ADMIN),
+  AdminController.getByIdFromDB
+);
 
 router.patch(
   "/:id",
+  auth(UserRole.SUPPER_ADMIN, UserRole.ADMIN),
   validateRequest(adminValidationSchemas.update),
   AdminController.updateIntoDB
 );
 
-router.delete("/:id", AdminController.deleteFromDB);
+router.delete(
+  "/:id",
+  auth(UserRole.SUPPER_ADMIN, UserRole.ADMIN),
+  AdminController.deleteFromDB
+);
 
-router.delete("/soft/:id", AdminController.softDeleteFromDB);
+router.delete(
+  "/soft/:id",
+  auth(UserRole.SUPPER_ADMIN, UserRole.ADMIN),
+  AdminController.softDeleteFromDB
+);
 
 export const AdminRoutes = router;
