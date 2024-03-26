@@ -1,10 +1,15 @@
 import { Admin, Prisma, PrismaClient, UserStatus } from "@prisma/client";
 import { adminSearchAbleFields } from "./admin.constant";
 import { paginationHelper } from "../../../helpers/paginationHelpers";
+import { TAdminFilterRequest } from "./admin.interface";
+import { TPaginationOptions } from "../../interfaces/pagination";
 
 const prisma = new PrismaClient();
 
-const getAllFromDB = async (query: any, options: any) => {
+const getAllFromDB = async (
+  query: TAdminFilterRequest,
+  options: TPaginationOptions
+) => {
   const { page, limit, skip } = paginationHelper.calculatePagination(options);
 
   const { searchTerm, ...filterData } = query;
@@ -26,7 +31,7 @@ const getAllFromDB = async (query: any, options: any) => {
     andCondition.push({
       AND: adminFilteredFields.map((key) => ({
         [key]: {
-          equals: filterData[key],
+          equals: (filterData as any)[key],
         },
       })),
     });
@@ -66,7 +71,7 @@ const getAllFromDB = async (query: any, options: any) => {
 };
 
 const getByIdFromDB = async (id: string): Promise<Admin | null> => {
-  const result = await prisma.admin.findUnique({
+  const result = await prisma.admin.findUniqueOrThrow({
     where: {
       id,
       isDeleted: false,
@@ -80,6 +85,8 @@ const updateIntoDB = async (
   id: string,
   data: Partial<Admin>
 ): Promise<Admin> => {
+  console.log("hetting");
+
   await prisma.admin.findUniqueOrThrow({
     where: {
       id,
