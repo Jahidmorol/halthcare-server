@@ -85,8 +85,6 @@ const updateIntoDB = async (
   id: string,
   data: Partial<Admin>
 ): Promise<Admin> => {
-  console.log("hetting");
-
   await prisma.admin.findUniqueOrThrow({
     where: {
       id,
