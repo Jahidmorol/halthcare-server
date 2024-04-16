@@ -37,11 +37,28 @@ router.post(
   }
 );
 
+router.get(
+  "/",
+  auth(UserRole.SUPPER_ADMIN, UserRole.ADMIN),
+  userController.getAllFromDB
+);
+
 router.patch(
   "/:id/status",
   auth(UserRole.SUPPER_ADMIN, UserRole.ADMIN),
   validateRequest(userValidation.updateStatus),
   userController.changeProfileStatus
+);
+
+router.get(
+  "/me",
+  auth(
+    UserRole.ADMIN,
+    UserRole.DOCTOR,
+    UserRole.PATIENT,
+    UserRole.SUPPER_ADMIN
+  ),
+  userController.getMyProfile
 );
 
 export const UserRoutes = router;

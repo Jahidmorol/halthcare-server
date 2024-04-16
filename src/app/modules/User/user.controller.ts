@@ -5,6 +5,7 @@ import catchAsync from "../../../shared/catchAsync";
 import httpStatus from "http-status";
 import { pick } from "../../../shared/pick";
 import { userFilterableFields } from "./user.constant";
+import { TAuthUser } from "../../interfaces/common";
 
 const createAdmin = catchAsync(async (req, res) => {
   const result = await userService.createAdmin(req);
@@ -64,10 +65,26 @@ const changeProfileStatus = catchAsync(async (req, res) => {
   });
 });
 
+const getMyProfile = catchAsync(
+  async (req: Request & { user?: TAuthUser }, res) => {
+    const user = req.user;
+
+    const result = await userService.getMyProfile(user as TAuthUser);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "My profile data fetched!",
+      data: result,
+    });
+  }
+);
+
 export const userController = {
   createAdmin,
   createDoctor,
   createPatient,
   getAllFromDB,
   changeProfileStatus,
+  getMyProfile,
 };
