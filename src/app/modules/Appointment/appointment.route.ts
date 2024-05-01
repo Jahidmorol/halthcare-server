@@ -20,4 +20,10 @@ router.get(
   AppointmentController.getMyAppointment
 );
 
+router.get(
+  "/",
+  auth(UserRole.SUPPER_ADMIN, UserRole.ADMIN),
+  AppointmentController.getAllFromDB
+);
+
 export const AppointmentRoutes = router;
