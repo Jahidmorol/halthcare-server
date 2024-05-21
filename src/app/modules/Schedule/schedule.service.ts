@@ -6,6 +6,12 @@ import { paginationHelper } from "../../../helpers/paginationHelpers";
 import { TPaginationOptions } from "../../interfaces/pagination";
 import { TAuthUser } from "../../interfaces/common";
 
+// for utc time -----=>
+// const convertDateTime = async (date: Date) => {
+//   const offset = date.getTimezoneOffset() * 60000;
+//   return new Date(date.getTime() + offset);
+// };
+
 const insertIntoDB = async (payload: TSchedule): Promise<Schedule[] | null> => {
   const schedules = [];
 
@@ -34,6 +40,15 @@ const insertIntoDB = async (payload: TSchedule): Promise<Schedule[] | null> => {
     );
 
     while (startDateTime < endDateTime) {
+      // for utc time -----=>
+      // const s = await convertDateTime(startDateTime);
+      // const e = await convertDateTime(addMinutes(startDateTime, 30));
+
+      // const scheduleData = {
+      //   startDateTime: s,
+      //   endDateTime: e,
+      // };
+
       const scheduleData = {
         startDateTime,
         endDateTime: addMinutes(startDateTime, 30),
